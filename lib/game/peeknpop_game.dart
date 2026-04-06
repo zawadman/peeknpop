@@ -1,17 +1,11 @@
-import 'dart:math';
-
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 class PeeknPopGame extends FlameGame {
-  // number of grid rows (vertical)
-  final int rows = 10;
+  final int rows = 30;
+  final int cols = 18;
 
-  // number of grid columns (horizontal)
-  final int cols = 6;
-
-  // size of each grid cell
   late double cellWidth;
   late double cellHeight;
 
@@ -19,9 +13,9 @@ class PeeknPopGame extends FlameGame {
   Future<void> onLoad() async {
     super.onLoad();
 
-    // -------------------------------------------------
-    // 1. LOAD BACKGROUND IMAGE
-    // -------------------------------------------------
+    // -----------------------------
+    // BACKGROUND
+    // -----------------------------
     final background = SpriteComponent()
       ..sprite = await loadSprite('birthday_bg.png')
       ..size = size
@@ -29,44 +23,57 @@ class PeeknPopGame extends FlameGame {
 
     add(background);
 
-    // -------------------------------------------------
-    // 2. CALCULATE GRID CELL SIZE BASED ON SCREEN SIZE
-    // -------------------------------------------------
+    // -----------------------------
+    // GRID SIZE
+    // -----------------------------
     cellWidth = size.x / cols;
     cellHeight = size.y / rows;
 
-    // -------------------------------------------------
-    // 3. DRAW DEBUG GRID (red dots)
-    // -------------------------------------------------
-    _createDebugGrid();
+    // -----------------------------
+    // GRID OVERLAY
+    // -----------------------------
+    add(GridOverlay(rows: rows, cols: cols));
+  }
+}
+
+class GridOverlay extends PositionComponent with HasGameReference<FlameGame> {
+  final int rows;
+  final int cols;
+
+  GridOverlay({required this.rows, required this.cols});
+
+  @override
+  Future<void> onLoad() async {
+    super.onLoad();
+
+    // THIS WAS MISSING
+    size = game.size;
+    position = Vector2.zero();
   }
 
-  void _createDebugGrid() {
-    //final random = Random();
+  @override
+  void render(Canvas canvas) {
+    super.render(canvas);
 
-    // loop through rows
-    for (int r = 0; r < rows; r++) {
-      // loop through columns
-      for (int c = 0; c < cols; c++) {
-        // -------------------------------------------------
-        // CALCULATE CENTER POSITION OF EACH GRID CELL
-        // -------------------------------------------------
-        final x = c * cellWidth + cellWidth / 2;
-        final y = r * cellHeight + cellHeight / 2;
+    final paint = Paint()
+      ..color = Colors.red
+      ..strokeWidth = 1;
 
-        // -------------------------------------------------
-        // DRAW DEBUG DOT
-        // this shows where balloons will spawn
-        // -------------------------------------------------
-        add(
-          CircleComponent(
-            radius: 4,
-            position: Vector2(x, y),
-            anchor: Anchor.center,
-            paint: Paint()..color = Colors.red,
-          ),
-        );
-      }
+    final cellWidth = size.x / cols;
+    final cellHeight = size.y / rows;
+
+    // vertical lines
+    for (int c = 0; c <= cols; c++) {
+      final x = c * cellWidth;
+
+      canvas.drawLine(Offset(x, 0), Offset(x, size.y), paint);
+    }
+
+    // horizontal lines
+    for (int r = 0; r <= rows; r++) {
+      final y = r * cellHeight;
+
+      canvas.drawLine(Offset(0, y), Offset(size.x, y), paint);
     }
   }
 }
