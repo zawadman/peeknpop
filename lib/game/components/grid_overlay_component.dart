@@ -52,13 +52,13 @@ class GridOverlayComponent extends PositionComponent
     }
 
     // Draw coordinate labels at intersections
-    for (int r = 0; r <= rows; r++) {
-      for (int c = 0; c <= cols; c++) {
-        final x = c * cellWidth;
-        final y = r * cellHeight;
+    // for (int r = 0; r <= rows; r++) {
+    //   for (int c = 0; c <= cols; c++) {
+    //     final x = c * cellWidth;
+    //     final y = r * cellHeight;
 
-        coordinateTextPaint.render(canvas, '($r,$c)', Vector2(x + 2, y + 2));
-      }
-    }
+    //     coordinateTextPaint.render(canvas, '($r,$c)', Vector2(x + 2, y + 2));
+    //   }
+    // }
   }
 }

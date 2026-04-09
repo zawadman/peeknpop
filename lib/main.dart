@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
-import 'game/peeknpop_game.dart';
+import 'game/systems/peeknpop_game.dart';
 
 void main() {
   runApp(const PeeknPopApp());
