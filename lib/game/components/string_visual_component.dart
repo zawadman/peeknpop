@@ -21,7 +21,7 @@ class StringVisualComponent extends PositionComponent {
     anchor = Anchor.bottomCenter;
 
     final balloon = BalloonVisualComponent(radius: balloonRadius)
-      ..position = Vector2(size.x / 2 + 7, 0)
+      ..position = Vector2(size.x / 2, 0)
       ..anchor = Anchor.bottomCenter;
 
     add(balloon);
@@ -38,7 +38,7 @@ class StringVisualComponent extends PositionComponent {
     final x = size.x / 2;
 
     final start = Offset(x + 7, size.y);
-    final end = Offset(x + 17, 0);
+    final end = Offset(x, 0);
 
     canvas.drawLine(start, end, stringPaint);
   }

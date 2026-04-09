@@ -1,3 +1,4 @@
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -5,7 +6,7 @@ import 'balloon_unit_component.dart';
 import 'string_visual_component.dart';
 
 class BalloonVisualComponent extends SpriteComponent
-    with HasGameReference<FlameGame>, TapCallbacks {
+    with HasGameReference<FlameGame>, TapCallbacks, GestureHitboxes {
   final double radius;
   final String spritePath;
 
@@ -18,23 +19,28 @@ class BalloonVisualComponent extends SpriteComponent
   Future<void> onLoad() async {
     await super.onLoad();
 
-    final scaledRadius = radius * 4; //issue with tap because of scale
+    final scaledRadius = radius * 8;
 
     sprite = await game.loadSprite(spritePath);
-    size = Vector2(
-      scaledRadius * 4,
-      scaledRadius * 2.4,
-    ); //issue with tap because of scale
+    size = Vector2(scaledRadius * 2, scaledRadius * 1.2);
     anchor = Anchor.center;
+
+    final hitbox =
+        CircleHitbox(
+            radius: size.x * 0.11,
+          ) //hardcoded size to match sprite dimensions
+          ..anchor = Anchor.center
+          ..position = Vector2(size.x / 2, size.y / 2);
+
+    add(hitbox);
   }
 
   @override
   void onTapDown(TapDownEvent event) {
-    if (parent is StringVisualComponent) {
-      final stringParent = parent as StringVisualComponent;
-
-      if (stringParent.parent is BalloonUnitComponent) {
-        final balloonUnit = stringParent.parent as BalloonUnitComponent;
+    final stringParent = parent;
+    if (stringParent is StringVisualComponent) {
+      final balloonUnit = stringParent.parent;
+      if (balloonUnit is BalloonUnitComponent) {
         balloonUnit.pop();
       }
     }
