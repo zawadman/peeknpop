@@ -19,7 +19,7 @@ class BalloonVisualComponent extends SpriteComponent
   Future<void> onLoad() async {
     await super.onLoad();
 
-    final scaledRadius = radius * 8;
+    final scaledRadius = radius * 12;
 
     sprite = await game.loadSprite(spritePath);
     size = Vector2(scaledRadius * 2, scaledRadius * 1.2);
@@ -30,7 +30,7 @@ class BalloonVisualComponent extends SpriteComponent
             radius: size.x * 0.11,
           ) //hardcoded size to match sprite dimensions
           ..anchor = Anchor.center
-          ..position = Vector2(size.x / 2, size.y / 2);
+          ..position = Vector2(size.x / 2, size.y / 2 - 15);
 
     add(hitbox);
   }
